@@ -1,25 +1,17 @@
 package com.wearewaes.assignment.diff.integration;
 
-import com.wearewaes.assignment.diff.controller.DiffController;
-import com.wearewaes.assignment.diff.domain.comparator.impl.ValuePairDiffComparator;
-import com.wearewaes.assignment.diff.domain.decoder.base64.impl.ValuePairBase64Decoder;
 import com.wearewaes.assignment.diff.domain.exception.MissingValues;
 import com.wearewaes.assignment.diff.domain.exception.ValuesAreEqual;
 import com.wearewaes.assignment.diff.domain.model.*;
-import com.wearewaes.assignment.diff.service.impl.DiffServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +29,7 @@ public class GetDifferencesIntegrationTest {
 
     @Test
     public void shouldThrowMissingValuesWhenValuesAreNull() {
-        // when
+        // given
         DiffRequest request = new DiffRequest();
 
         // expect
@@ -51,7 +43,7 @@ public class GetDifferencesIntegrationTest {
 
     @Test
     public void shouldThrowMissingValuesWhenValuesAreEmpty() {
-        // when
+        // given
         DiffRequest request = new DiffRequest("", "");
 
         // expect
@@ -65,7 +57,7 @@ public class GetDifferencesIntegrationTest {
 
     @Test
     public void shouldThrowValuesAreEqualWhenValuesHasSameValue() {
-        // when
+        // given
         DiffRequest request = new DiffRequest("SGFsbG8=", "SGFsbG8=");
 
         // expect
@@ -79,7 +71,7 @@ public class GetDifferencesIntegrationTest {
 
     @Test
     public void shouldThrowValuesHaveDifferentSizeWhenValuesHaveDifferentSizes() {
-        // when
+        // given
         DiffRequest request = new DiffRequest("SGFsbG8=", "SGFVsbG8=");
 
         // expect

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+/**
+ * REST endpoints to evaluate diffs between two values
+ */
 @RestController
 @RequestMapping("/v1/diff")
 public class DiffController {

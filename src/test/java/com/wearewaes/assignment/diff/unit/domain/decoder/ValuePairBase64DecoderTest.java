@@ -5,7 +5,6 @@ import com.wearewaes.assignment.diff.domain.exception.MissingValues;
 import com.wearewaes.assignment.diff.domain.model.ValuePair;
 import org.junit.Before;
 import org.junit.Test;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 public class ValuePairBase64DecoderTest {
@@ -19,9 +18,8 @@ public class ValuePairBase64DecoderTest {
 
     @Test
     public void shouldReturnEmptyValuePairOnInputIsEmpty() {
-        // when
+        // given
         ValuePair values = new ValuePair("", "");
-
         // expect
         StepVerifier.create(decoder.decode(values))
                 .expectError(MissingValues.class)
@@ -30,7 +28,7 @@ public class ValuePairBase64DecoderTest {
 
     @Test
     public void shouldReturnDecodedValuesWhenInputHasEncodedValues() {
-        // when
+        // given
         ValuePair values = new ValuePair("SGVsbG8=", "SGVsbG8=");
         ValuePair decodedValues = new ValuePair("Hello", "Hello");
         // expect
