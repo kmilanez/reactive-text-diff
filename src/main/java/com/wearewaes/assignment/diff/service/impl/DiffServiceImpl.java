@@ -29,7 +29,7 @@ public class DiffServiceImpl implements DiffService {
     }
 
     /**
-     * Evaluate value pair and return if they are equal, have different size
+     * Evaluate request value pair and return if they are equal, have different size
      * or their differences in (offset, length) pairs
      * @param request diff request with value pair
      * @return response with value pair differences
