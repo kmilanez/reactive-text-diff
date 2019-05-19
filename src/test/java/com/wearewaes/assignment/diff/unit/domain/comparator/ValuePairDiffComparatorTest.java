@@ -48,10 +48,9 @@ public class ValuePairDiffComparatorTest {
         // given
         ValuePair values = new ValuePair("SGFsbG8=", "SGVsbG8=");
         List<ValueDiff> diffs = Collections.singletonList(new ValueDiff(2, 1));
-        ValuePairDiffs valuePairDiffs = new ValuePairDiffs(values, diffs);
         // expect
         StepVerifier.create(comparator.compare(values))
-                .expectNext(valuePairDiffs)
+                .expectNext(diffs)
                 .verifyComplete();
     }
 }

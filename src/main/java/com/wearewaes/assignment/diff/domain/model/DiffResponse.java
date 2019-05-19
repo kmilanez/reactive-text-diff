@@ -2,6 +2,8 @@ package com.wearewaes.assignment.diff.domain.model;
 
 import lombok.*;
 
+import java.util.List;
+
 /**
  * This class abstracts the response that will be sent with the diff pairs
  */
@@ -11,5 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiffResponse {
-    private ValuePairDiffs diffs;
+    private ValuePair values;
+    private List<ValueDiff> diffs;
 }

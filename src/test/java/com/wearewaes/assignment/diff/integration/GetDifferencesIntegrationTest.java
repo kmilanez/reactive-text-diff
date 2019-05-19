@@ -87,10 +87,8 @@ public class GetDifferencesIntegrationTest {
     public void shouldReturnDecodedValuesAndTheirDifferencesWhenThereAreDifferences() {
         // given
         DiffRequest request = new DiffRequest("SGFsbG8=", "SGVsbG8=");
-        ValuePair decodedPair = new ValuePair("Hallo", "Hello");
         List<ValueDiff> pairDiffs = Collections.singletonList(new ValueDiff(1, 1));
-        ValuePairDiffs diffs = new ValuePairDiffs(decodedPair, pairDiffs);
-        DiffResponse response = new DiffResponse(diffs);
+        DiffResponse response = new DiffResponse(request.getValues(), pairDiffs);
         // expect
         webClient.post().uri(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
