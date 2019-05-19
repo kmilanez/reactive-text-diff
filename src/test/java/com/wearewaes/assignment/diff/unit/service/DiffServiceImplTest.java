@@ -27,7 +27,7 @@ public class DiffServiceImplTest {
     private Base64Decoder<ValuePair, ValuePair> decoder;
 
     @Mock
-    private DiffComparator<ValuePair, List<ValueDiff>> comparator;
+    private DiffComparator<ValuePair, ValuePairDiffs> comparator;
 
     @InjectMocks
     private DiffServiceImpl service;
@@ -74,10 +74,11 @@ public class DiffServiceImplTest {
         DiffRequest request = new DiffRequest("SGFsbG8=", "SGVsbG8=");
         ValuePair decodedPair = new ValuePair("Hello", "Hallo");
         List<ValueDiff> pairDiffs = Collections.singletonList(new ValueDiff(2, 1));
-        DiffResponse expectedResponse = new DiffResponse(request.getValues(), pairDiffs);
+        ValuePairDiffs diffs = new ValuePairDiffs(decodedPair, pairDiffs);
+        DiffResponse expectedResponse = new DiffResponse(diffs);
         // when
         when(decoder.decode(request.getValues())).thenReturn(Mono.just(decodedPair));
-        when(comparator.compare(decodedPair)).thenReturn(Mono.just(pairDiffs));
+        when(comparator.compare(decodedPair)).thenReturn(Mono.just(diffs));
         // then
         StepVerifier.create(service.evaluateDifferences(request))
                 .expectNext(expectedResponse)

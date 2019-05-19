@@ -9,15 +9,12 @@ import com.wearewaes.assignment.diff.domain.model.ValuePairDiffs;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Implements a value pair comparator that returns a list of difference offset and
  * length
  */
 @Component
-public class ValuePairDiffComparator implements DiffComparator<ValuePair, List<ValueDiff>> {
+public class ValuePairDiffComparator implements DiffComparator<ValuePair, ValuePairDiffs> {
 
     private static final int CLEAN_STATE = 0;
 
@@ -27,7 +24,7 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, List<V
      * @param valuePair string value pair
      * @return list with differences (offset, length)
      */
-    public Mono<List<ValueDiff>> compare(final ValuePair valuePair) {
+    public Mono<ValuePairDiffs> compare(final ValuePair valuePair) {
         return Mono.just(valuePair).handle((pair, sink) -> {
             if (pair.areEqual()) {
                 sink.error(new ValuesAreEqual());
@@ -39,8 +36,8 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, List<V
         });
     }
 
-    private List<ValueDiff> computeDifferences(final ValuePair valuePair) {
-        final List<ValueDiff> valuePairDiffs = new ArrayList<>();
+    private ValuePairDiffs computeDifferences(final ValuePair valuePair) {
+        final ValuePairDiffs valuePairDiffs = new ValuePairDiffs(valuePair);
 
         final String leftValue = valuePair.getLeftValue();
         final String rightValue = valuePair.getRightValue();
@@ -58,7 +55,7 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, List<V
                 }
             } else {
                 if (isCapturingDiffs(length)) {
-                    valuePairDiffs.add(new ValueDiff(offset, length));
+                    valuePairDiffs.addDiff(new ValueDiff(offset, length));
                     offset = CLEAN_STATE;
                     length = CLEAN_STATE;
                 }

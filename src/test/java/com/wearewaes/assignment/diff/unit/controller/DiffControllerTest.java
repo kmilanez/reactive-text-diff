@@ -94,8 +94,10 @@ public class DiffControllerTest {
     public void shouldReturnDecodedValuesAndTheirDifferencesWhenThereAreDifferences() {
         // given
         DiffRequest request = new DiffRequest("SGFsbG8=", "SGVsbG8=");
+        ValuePair decodedPair = new ValuePair("Hello", "Hallo");
         List<ValueDiff> pairDiffs = Collections.singletonList(new ValueDiff(2, 1));
-        DiffResponse response = new DiffResponse(request.getValues(), pairDiffs);
+        ValuePairDiffs diffs = new ValuePairDiffs(decodedPair, pairDiffs);
+        DiffResponse response = new DiffResponse(diffs);
         // when
         when(service.evaluateDifferences(request)).thenReturn(Mono.just(response));
         // then

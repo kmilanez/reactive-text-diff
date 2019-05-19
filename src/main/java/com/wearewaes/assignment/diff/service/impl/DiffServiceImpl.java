@@ -4,12 +4,13 @@ import com.wearewaes.assignment.diff.domain.comparator.DiffComparator;
 import com.wearewaes.assignment.diff.domain.decoder.base64.Base64Decoder;
 import com.wearewaes.assignment.diff.domain.exception.ValuesAreEqual;
 import com.wearewaes.assignment.diff.domain.exception.ValuesHaveDifferentSize;
-import com.wearewaes.assignment.diff.domain.model.*;
+import com.wearewaes.assignment.diff.domain.model.DiffRequest;
+import com.wearewaes.assignment.diff.domain.model.DiffResponse;
+import com.wearewaes.assignment.diff.domain.model.ValuePair;
+import com.wearewaes.assignment.diff.domain.model.ValuePairDiffs;
 import com.wearewaes.assignment.diff.service.DiffService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 /**
  * Implementation of the diff evaluator service. This implementation applies
@@ -18,10 +19,10 @@ import java.util.List;
 @Service
 public class DiffServiceImpl implements DiffService {
 
-    private DiffComparator<ValuePair, List<ValueDiff>> comparator;
+    private DiffComparator<ValuePair, ValuePairDiffs> comparator;
     private Base64Decoder<ValuePair, ValuePair> decoder;
 
-    public DiffServiceImpl(DiffComparator<ValuePair, List<ValueDiff>> comparator,
+    public DiffServiceImpl(DiffComparator<ValuePair, ValuePairDiffs> comparator,
                            Base64Decoder<ValuePair, ValuePair> decoder) {
         this.comparator = comparator;
         this.decoder = decoder;
@@ -39,7 +40,7 @@ public class DiffServiceImpl implements DiffService {
     public Mono<DiffResponse> evaluateDifferences(final DiffRequest request) {
         return decoder.decode(request.getValues())
                 .flatMap(pair -> comparator.compare(pair))
-                .map(diffs -> new DiffResponse(request.getValues(), diffs))
+                .map(DiffResponse::new)
                 .doOnError(Mono::error);
     }
 }
