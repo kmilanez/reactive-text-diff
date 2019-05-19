@@ -7,8 +7,6 @@ import com.wearewaes.assignment.diff.domain.model.ValueDiff;
 import com.wearewaes.assignment.diff.domain.model.ValuePair;
 import com.wearewaes.assignment.diff.domain.model.ValuePairDiffs;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 /**
@@ -26,7 +24,7 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, ValueP
      * @param valuePair string value pair
      * @return list with differences (offset, length)
      */
-    public Mono<ValuePairDiffs> compare(ValuePair valuePair) {
+    public Mono<ValuePairDiffs> compare(final ValuePair valuePair) {
         return Mono.just(valuePair).handle((pair, sink) -> {
             if (pair.areEqual()) {
                 sink.error(new ValuesAreEqual());
@@ -38,17 +36,11 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, ValueP
         });
     }
 
-    private boolean checkIfValuesAreNotEmpty(ValuePair valuePair) {
-        return !ObjectUtils.isEmpty(valuePair)
-                && !StringUtils.isEmpty(valuePair.getLeftValue())
-                && !StringUtils.isEmpty(valuePair.getLeftValue()) ;
-    }
+    private ValuePairDiffs computeDifferences(final ValuePair valuePair) {
+        final ValuePairDiffs valuePairDiffs = new ValuePairDiffs(valuePair);
 
-    private ValuePairDiffs computeDifferences(ValuePair valuePair) {
-        ValuePairDiffs valuePairDiffs = new ValuePairDiffs(valuePair);
-
-        String leftValue = valuePair.getLeftValue();
-        String rightValue = valuePair.getRightValue();
+        final String leftValue = valuePair.getLeftValue();
+        final String rightValue = valuePair.getRightValue();
 
         int length = CLEAN_STATE;
         int offset = CLEAN_STATE;
@@ -80,7 +72,8 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, ValueP
      * @param index index to compare
      * @return true if values are not the same
      */
-    private boolean valuesAreDifferentInPosition(String firstValue, String secondValue, int index) {
+    private boolean valuesAreDifferentInPosition(final String firstValue, final String secondValue,
+                                                 final int index) {
         return firstValue.charAt(index) != secondValue.charAt(index);
     }
 
@@ -90,7 +83,7 @@ public class ValuePairDiffComparator implements DiffComparator<ValuePair, ValueP
      * @param length difference length
      * @return true if its no in clean state(0)
      */
-    private boolean isCapturingDiffs(int length) {
+    private boolean isCapturingDiffs(final int length) {
         return length != CLEAN_STATE;
     }
 }

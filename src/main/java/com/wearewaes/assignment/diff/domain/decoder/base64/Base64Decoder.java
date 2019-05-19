@@ -10,5 +10,5 @@ import reactor.core.publisher.Mono;
  * @param <S> output value type
  */
 public interface Base64Decoder<R, S> {
-    Mono<S> decode(R value);
+    Mono<S> decode(final R value);
 }

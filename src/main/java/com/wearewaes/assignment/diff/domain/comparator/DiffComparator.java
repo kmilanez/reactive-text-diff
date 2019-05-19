@@ -9,6 +9,6 @@ import reactor.core.publisher.Mono;
  * or container
  */
 public interface DiffComparator<R, T> {
-    Mono<T> compare(R values);
+    Mono<T> compare(final R values);
 }
 

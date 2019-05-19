@@ -37,7 +37,7 @@ public class DiffServiceImpl implements DiffService {
      * @throws ValuesHaveDifferentSize if value pair have two values with different sizes
      */
     @Override
-    public Mono<DiffResponse> evaluateDifferences(DiffRequest request) {
+    public Mono<DiffResponse> evaluateDifferences(final DiffRequest request) {
         return decoder.decode(request.getValues())
                 .flatMap(pair -> comparator.compare(pair))
                 .map(DiffResponse::new)

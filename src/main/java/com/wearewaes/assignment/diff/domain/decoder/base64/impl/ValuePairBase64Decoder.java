@@ -17,27 +17,23 @@ import reactor.core.publisher.Mono;
 @Component
 public class ValuePairBase64Decoder implements Base64Decoder<ValuePair, ValuePair> {
     @Override
-    public Mono<ValuePair> decode(ValuePair values) {
-        if (ObjectUtils.isEmpty(values)) {
-            return Mono.error(MissingValues::new);
-        }
-        return Mono.just(values).handle((vals, sink) -> {
-            if (checkValueIsEmpty(vals)) {
+    public Mono<ValuePair> decode(final ValuePair values) {
+        return Mono.just(values).handle((pair, sink) -> {
+            if (ObjectUtils.isEmpty(values) || checkValueIsEmpty(pair)) {
                 sink.error(new MissingValues());
             } else {
-                String decodedLeftValue = decodeValue(vals.getLeftValue());
-                String decodedRightValue = decodeValue(vals.getRightValue());
-                sink.next(new ValuePair(decodedLeftValue, decodedRightValue));
+                sink.next(new ValuePair(decodeValue(pair.getLeftValue()),
+                        decodeValue(pair.getRightValue())));
             }
         });
     }
 
-    private boolean checkValueIsEmpty(ValuePair values) {
+    private boolean checkValueIsEmpty(final ValuePair values) {
         return ObjectUtils.isEmpty(values) || ObjectUtils.isEmpty(values.getLeftValue())
                 || ObjectUtils.isEmpty(values.getRightValue());
     }
 
-    private String decodeValue(String encodedValue) {
+    private String decodeValue(final String encodedValue) {
         return new String(BaseEncoding.base64().decode(encodedValue));
     }
 }
